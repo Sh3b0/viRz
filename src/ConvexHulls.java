@@ -31,7 +31,13 @@ public class ConvexHulls {
 
     private void GrahamAlgorithm() {
         ArrayList<Point> sortedPoints = new ArrayList<>(points);
-        Collections.sort(sortedPoints, Comparator.comparingInt((Point a) -> a.x()));
+        Comparator<Point> comparator = (p1, p2) -> p1.x() > p2.x() || (p1.x() == p2.x() && p1.y() < p2.y()) ? 1 : -1;
+        Collections.sort(sortedPoints, comparator);
+        for (int i = 0; i < sortedPoints.size() - 1; i++){
+            if (sortedPoints.get(i).x() == sortedPoints.get(i+1).x() && sortedPoints.get(i).y() == sortedPoints.get(i+1).y())
+                sortedPoints.remove(i);
+
+        }
         Stack<Point> topSide = new Stack<>();
         Stack<Point> bottomSide = new Stack<>();
         topSide.push(sortedPoints.get(0));
@@ -40,14 +46,14 @@ public class ConvexHulls {
         bottomSide.push(sortedPoints.get(1));
         for (int i = 2; i < sortedPoints.size(); i++) {
             Orientation orientation = GetLast3PointsOrientation(topSide, sortedPoints.get(i));
-            while (topSide.size() > 1 && orientation != Orientation.CLOCKWISE) {
+            while (topSide.size() > 1 && orientation == Orientation.COUNTERCLOCKWISE) {
                 topSide.pop();
                 if (topSide.size() > 1)
                     orientation = GetLast3PointsOrientation(topSide, sortedPoints.get(i));
             }
             topSide.push(sortedPoints.get(i));
             orientation = GetLast3PointsOrientation(bottomSide, sortedPoints.get(i));
-            while (bottomSide.size() > 1 && orientation != Orientation.COUNTERCLOCKWISE)  {
+            while (bottomSide.size() > 1 && orientation == Orientation.CLOCKWISE)  {
                 bottomSide.pop();
                 if (bottomSide.size() > 1)
                     orientation = GetLast3PointsOrientation(bottomSide, sortedPoints.get(i));
