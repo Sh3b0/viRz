@@ -731,7 +731,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
         JMenu algorithm = new JMenu("Algorithm");
         menuBar.add(algorithm);
         {
-            JMenuItem[] algs = {new JMenuItem("Kruskal"), new JMenuItem("Prim"), new JMenuItem("DFS"),
+            JMenuItem[] algs = {new JMenuItem("Graham’s Algorithm"), new JMenuItem("Kruskal"), new JMenuItem("Prim"), new JMenuItem("DFS"),
                     new JMenuItem("BFS")};
             for (JMenuItem alg : algs) {
                 algorithm.add(alg);

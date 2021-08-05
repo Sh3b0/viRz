@@ -1,8 +1,5 @@
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 
 // Main class for algorithms implementation and visualization.
 public class Visualizer {
@@ -178,6 +175,23 @@ public class Visualizer {
             Visit(points[cur], StdDraw.GREEN);
         }
 
+        Done();
+    }
+
+    // Algorithm #5
+    public void GrahamAlgorithm(AlgoThread t) {
+        Init("Implementing Graham's Algorithm...");
+
+        ConvexHulls convexHulls = new ConvexHulls(new ArrayList<>(Arrays.asList(points)));
+        ArrayList<Point> cornerPoints = convexHulls.getCornerPoints();
+        for (Point p : cornerPoints) {
+            Visit(new Point(p.x(), p.y()), StdDraw.RED);
+            if (t.stop) return;
+        }
+        int cornerSize = cornerPoints.size();
+        for (int i = 0; i < cornerSize - 1; i++)
+            StdDraw.line(cornerPoints.get(i).x(), cornerPoints.get(i).y(), cornerPoints.get(i+1).x(), cornerPoints.get(i+1).y());
+        StdDraw.line(cornerPoints.get(0).x(), cornerPoints.get(0).y(), cornerPoints.get(cornerSize - 1).x(), cornerPoints.get(cornerSize - 1).y());
         Done();
     }
 

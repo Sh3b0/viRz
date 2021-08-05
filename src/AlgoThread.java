@@ -13,6 +13,7 @@ public class AlgoThread extends Thread {
             case "Prim" -> v.PrimMST(this);
             case "DFS" -> v.DFS(this);
             case "BFS" -> v.BFS(this);
+            case "Graham’s Algorithm" -> v.GrahamAlgorithm(this);
         }
     }
 }

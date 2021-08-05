@@ -5,7 +5,7 @@ import java.util.Stack;
 
 public class ConvexHulls {
     private ArrayList<Point> points;
-    private ArrayList<Point> cornerPoints;
+    private ArrayList<Point> cornerPoints = new ArrayList<>();
     private Boolean isCornerPointsCalculated = false;
 
     private enum Orientation {
@@ -25,6 +25,9 @@ public class ConvexHulls {
             return Orientation.STRAIGHT;
         return det > 0 ? Orientation.COUNTERCLOCKWISE : Orientation.CLOCKWISE;
     }
+    private Orientation GetLast3PointsOrientation(Stack<Point> stack, Point lastEl) {
+        return Get3PointsOrientation(stack.get(stack.size() - 2), stack.get(stack.size() - 1), lastEl);
+    }
 
     private void GrahamAlgorithm() {
         ArrayList<Point> sortedPoints = new ArrayList<>(points);
@@ -36,20 +39,26 @@ public class ConvexHulls {
         bottomSide.push(sortedPoints.get(0));
         bottomSide.push(sortedPoints.get(1));
         for (int i = 2; i < sortedPoints.size(); i++) {
-            while (topSide.size() > 1 && 
-                    Get3PointsOrientation(topSide.get(topSide.size() - 2), topSide.get(topSide.size() - 1), sortedPoints.get(i)) 
-                            == Orientation.COUNTERCLOCKWISE) {
+            Orientation orientation = GetLast3PointsOrientation(topSide, sortedPoints.get(i));
+            while (topSide.size() > 1 && orientation != Orientation.CLOCKWISE) {
                 topSide.pop();
+                if (topSide.size() > 1)
+                    orientation = GetLast3PointsOrientation(topSide, sortedPoints.get(i));
             }
             topSide.push(sortedPoints.get(i));
-            while (bottomSide.size() > 1 &&
-                    Get3PointsOrientation(bottomSide.get(bottomSide.size() - 2), bottomSide.get(bottomSide.size() - 1), sortedPoints.get(i))
-                            == Orientation.CLOCKWISE) {
+            orientation = GetLast3PointsOrientation(bottomSide, sortedPoints.get(i));
+            while (bottomSide.size() > 1 && orientation != Orientation.COUNTERCLOCKWISE)  {
                 bottomSide.pop();
+                if (bottomSide.size() > 1)
+                    orientation = GetLast3PointsOrientation(bottomSide, sortedPoints.get(i));
             }
             bottomSide.push(sortedPoints.get(i));
         }
-
+        cornerPoints.addAll(topSide);
+        bottomSide.remove(0);
+        bottomSide.pop();
+        Collections.reverse(bottomSide);
+        cornerPoints.addAll(bottomSide);
     }
 
     public ArrayList<Point> getCornerPoints() {
