@@ -30,17 +30,6 @@ public class GrahamAlgorithm extends Algorithm {
     }
 
     private void VisualizeStackPoints(Stack<Point> stack, Visualizer v, Color colorLines){
-       //StdDraw.setPenRadius(0.001);
-       //StdDraw.setPenColor(StdDraw.GRAY);
-
-       //for (Edge edge : graph.edgeList) {
-       //    Point from = graph.points[edge.from];
-       //    Point to = grapgpoints[edge.to];
-       //    StdDraw.line(from.x(), from.y(), to.x(), to.y());
-       //}
-
-       //StdDraw.setPenRadius(0.015);
-
         for (Point p : stack) {
             v.Visit(p, StdDraw.RED);
         }
