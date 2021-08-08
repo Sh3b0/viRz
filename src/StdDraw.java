@@ -712,7 +712,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
         frame.pack();
         frame.requestFocusInWindow();
         frame.setVisible(true);
-    }
+        }
 
     // create the menu bar (changed to private)
     private static JMenuBar createMenuBar() {
@@ -731,7 +731,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
         JMenu algorithm = new JMenu("Algorithm");
         menuBar.add(algorithm);
         {
-            JMenuItem[] algs = {new JMenuItem("Kruskal"), new JMenuItem("Prim"), new JMenuItem("DFS"),
+            JMenuItem[] algs = {new JMenuItem("Graham’s Algorithm"), new JMenuItem("Kruskal"), new JMenuItem("Prim"), new JMenuItem("DFS"),
                     new JMenuItem("BFS")};
             for (JMenuItem alg : algs) {
                 algorithm.add(alg);
@@ -2138,6 +2138,11 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
         StdDraw.text(0.2, 0.5, "black text");
         StdDraw.setPenColor(StdDraw.WHITE);
         StdDraw.text(0.8, 0.8, "white text");
+
+        StdDraw.setCanvasSize(800, 600);
+        StdDraw.setScale(0, Visualizer.minAxis + Visualizer.maxAxis);
+        StdDraw.setPenColor(StdDraw.RED);
+        StdDraw.textLeft(1, Visualizer.maxAxis + 2, "Please select an algorithm from MenuBar!");
     }
 
 }
