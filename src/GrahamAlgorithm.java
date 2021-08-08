@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.*;
 
 public class GrahamAlgorithm extends Algorithm {
@@ -28,6 +29,38 @@ public class GrahamAlgorithm extends Algorithm {
         return Get3PointsOrientation(stack.get(stack.size() - 2), stack.get(stack.size() - 1), lastEl);
     }
 
+    private void VisualizeStackPoints(Stack<Point> stack, Visualizer v, Color colorLines){
+       //StdDraw.setPenRadius(0.001);
+       //StdDraw.setPenColor(StdDraw.GRAY);
+
+       //for (Edge edge : graph.edgeList) {
+       //    Point from = graph.points[edge.from];
+       //    Point to = grapgpoints[edge.to];
+       //    StdDraw.line(from.x(), from.y(), to.x(), to.y());
+       //}
+
+       //StdDraw.setPenRadius(0.015);
+
+        for (Point p : stack) {
+            v.Visit(p, StdDraw.RED);
+        }
+        StdDraw.setPenColor(colorLines);
+        for (int i = 0; i < stack.size() - 1; i++) {
+            Point from = stack.get(i);
+            Point to = stack.get(i + 1);
+            StdDraw.line(from.x(), from.y(), to.x(), to.y());
+        }
+    }
+
+    private void RenderAlgoStacks(Stack<Point> topSide, Stack<Point> bottomSide, Graph graph, Visualizer v, AlgoThread t) {
+        StdDraw.clear();
+        graph.Visualize(v, t);
+        StdDraw.pause(v.delay);
+        VisualizeStackPoints(topSide, v,  StdDraw.BLACK);
+        VisualizeStackPoints(bottomSide, v, StdDraw.CYAN);
+        StdDraw.pause(v.delay*10);
+    }
+
     @Override
     public void Visualize(Visualizer v, AlgoThread t) {
         graph.Visualize(v, t);
@@ -55,12 +88,13 @@ public class GrahamAlgorithm extends Algorithm {
             }
             topSide.push(sortedPoints.get(i));
             orientation = GetLast3PointsOrientation(bottomSide, sortedPoints.get(i));
-            while (bottomSide.size() > 1 && orientation == Orientation.CLOCKWISE)  {
+            while (bottomSide.size() > 1 && orientation == Orientation.CLOCKWISE) {
                 bottomSide.pop();
                 if (bottomSide.size() > 1)
                     orientation = GetLast3PointsOrientation(bottomSide, sortedPoints.get(i));
             }
             bottomSide.push(sortedPoints.get(i));
+            RenderAlgoStacks(topSide, bottomSide, graph, v, t);
         }
         cornerPoints.addAll(topSide);
         bottomSide.remove(0);
