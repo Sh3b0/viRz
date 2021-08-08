@@ -712,7 +712,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
         frame.pack();
         frame.requestFocusInWindow();
         frame.setVisible(true);
-    }
+        }
 
     // create the menu bar (changed to private)
     private static JMenuBar createMenuBar() {
@@ -2138,6 +2138,11 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
         StdDraw.text(0.2, 0.5, "black text");
         StdDraw.setPenColor(StdDraw.WHITE);
         StdDraw.text(0.8, 0.8, "white text");
+
+        StdDraw.setCanvasSize(800, 600);
+        StdDraw.setScale(0, Visualizer.minAxis + Visualizer.maxAxis);
+        StdDraw.setPenColor(StdDraw.RED);
+        StdDraw.textLeft(1, Visualizer.maxAxis + 2, "Please select an algorithm from MenuBar!");
     }
 
 }

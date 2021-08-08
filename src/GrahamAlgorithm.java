@@ -1,9 +1,7 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Stack;
+import java.util.*;
 
-public class ConvexHulls {
+public class GrahamAlgorithm extends Algorithm {
+    private Graph graph;
     private ArrayList<Point> points;
     private ArrayList<Point> cornerPoints = new ArrayList<>();
     private Boolean isCornerPointsCalculated = false;
@@ -14,8 +12,9 @@ public class ConvexHulls {
         STRAIGHT
     }
 
-    public ConvexHulls(ArrayList<Point> points) {
-        this.points = points;
+    public GrahamAlgorithm(Graph graph) {
+        this.graph = graph;
+        points = new ArrayList<>(Arrays.asList(graph.points));
     }
 
     private Orientation Get3PointsOrientation(Point p, Point q, Point r) {
@@ -29,7 +28,10 @@ public class ConvexHulls {
         return Get3PointsOrientation(stack.get(stack.size() - 2), stack.get(stack.size() - 1), lastEl);
     }
 
-    private void GrahamAlgorithm() {
+    @Override
+    public void Visualize(Visualizer v, AlgoThread t) {
+        graph.Visualize(v, t);
+
         ArrayList<Point> sortedPoints = new ArrayList<>(points);
         Comparator<Point> comparator = (p1, p2) -> p1.x() > p2.x() || (p1.x() == p2.x() && p1.y() < p2.y()) ? 1 : -1;
         Collections.sort(sortedPoints, comparator);
@@ -65,13 +67,34 @@ public class ConvexHulls {
         bottomSide.pop();
         Collections.reverse(bottomSide);
         cornerPoints.addAll(bottomSide);
+
+
+        for (Point p : cornerPoints) {
+            v.Visit(new Point(p.x(), p.y()), StdDraw.RED);
+            if (t.stop) return;
+        }
+        int cornerSize = cornerPoints.size();
+        for (int i = 0; i < cornerSize - 1; i++)
+            StdDraw.line(cornerPoints.get(i).x(), cornerPoints.get(i).y(), cornerPoints.get(i+1).x(), cornerPoints.get(i+1).y());
+        StdDraw.line(cornerPoints.get(0).x(), cornerPoints.get(0).y(), cornerPoints.get(cornerSize - 1).x(), cornerPoints.get(cornerSize - 1).y());
     }
 
-    public ArrayList<Point> getCornerPoints() {
-        if (isCornerPointsCalculated) {
-            return cornerPoints;
+    /*
+    // Algorithm #5
+    public void GrahamAlgorithm(AlgoThread t) {
+        Init("Implementing Graham's Algorithm...");
+
+        ConvexHulls convexHulls = new ConvexHulls(new ArrayList<>(Arrays.asList(points)));
+        ArrayList<Point> cornerPoints = convexHulls.getCornerPoints();
+        for (Point p : cornerPoints) {
+            Visit(new Point(p.x(), p.y()), StdDraw.RED);
+            if (t.stop) return;
         }
-        GrahamAlgorithm();
-        return cornerPoints;
+        int cornerSize = cornerPoints.size();
+        for (int i = 0; i < cornerSize - 1; i++)
+            StdDraw.line(cornerPoints.get(i).x(), cornerPoints.get(i).y(), cornerPoints.get(i+1).x(), cornerPoints.get(i+1).y());
+        StdDraw.line(cornerPoints.get(0).x(), cornerPoints.get(0).y(), cornerPoints.get(cornerSize - 1).x(), cornerPoints.get(cornerSize - 1).y());
+        Done();
     }
+     */
 }
